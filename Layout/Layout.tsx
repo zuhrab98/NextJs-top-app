@@ -1,12 +1,33 @@
-import { Pprops } from "./Layout.props"
+import { FunctionComponent } from "react";
+import { Footer } from "./Footer/Footer";
+import { Header } from "./Header/Header";
+import { LayoutProps } from "./Layout.props"
 import styles from './P.module.scss';
+import { Sidebar } from "./Sidebar/Sidebar";
 
 
-export const P = ({ size = 16, children }: Pprops): JSX.Element => {
+const Layout = ({ children }: LayoutProps): JSX.Element => {
     return (
-        <p
-            className={styles.p}
-            style={{ fontSize: size }}
-        >{children}</p>
+        <div>
+            <Header />
+            <div>
+                <Sidebar />
+                <div>
+                    {children}
+                </div>
+            </div>
+            <Footer />
+        </div>
     )
 }
+
+// Компонент высшего порядка
+export const withLayout = <T extends Record<string, unknown>>(Component: FunctionComponent<T>) => {
+    return function withLayoutComponent(props: T): JSX.Element {
+        return (
+            <Layout>
+                <Component {...props}/>
+            </Layout>
+        )
+    } 
+} 
